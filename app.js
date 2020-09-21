@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 // Routes
 const productRoutes = require("./api/routes/products");
-// const orderRoutes = require('./api/routes/orders');
+const orderRoutes = require('./api/routes/orders');
 
 mongoose.connect(
   "mongodb+srv://dovud:" +
@@ -44,7 +44,7 @@ app.use((req, res, next) => {
 
 // Routes which should handle requests
 app.use("/products", productRoutes);
-// app.use('/orders', orderRoutes);
+app.use('/orders', orderRoutes);
 
 // Handle errors. If no routes found, then the following line is reached
 app.use((req, res, next) => {
