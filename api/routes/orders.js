@@ -32,6 +32,34 @@ router.get("/", (req, res, next) => {
       });
     });
 });
+// Get All orders with its products data
+router.get("/products", (req, res, next) => {
+  Order.find()
+    .select("productId quantity _id")
+    .populate('productId')
+    .exec()
+    .then(orders => {
+      res.status(200).json({
+        count: orders.length,
+        orders: orders.map(order => {
+          return {
+            _id: order._id,
+            product: order.productId,
+            quantity: order.quantity,
+            request: {
+              type: "GET",
+              url: "http://localhost:3000/orders/" + order._id
+            }
+          };
+        })
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: err
+      });
+    });
+});
 
 router.post("/", (req, res, next) => {
   Product.findById(req.body.productId)
@@ -72,6 +100,32 @@ router.post("/", (req, res, next) => {
 
 router.get("/:orderId", (req, res, next) => {
   Order.findById(req.params.orderId)
+    .exec()
+    .then(order => {
+      if (!order) {
+        return res.status(404).json({
+          message: "Order not found"
+        });
+      }
+      res.status(200).json({
+        order: order,
+        request: {
+          type: "GET",
+          url: "http://localhost:3000/orders"
+        }
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: err
+      });
+    });
+});
+
+// Get order by ID with its products data
+router.get("/:orderId/products", (req, res, next) => {
+  Order.findById(req.params.orderId)
+    .populate('productId')
     .exec()
     .then(order => {
       if (!order) {

@@ -12,7 +12,7 @@ const orderRoutes = require('./api/routes/orders');
 mongoose.connect(
   "mongodb+srv://dovud:" +
     process.env.MONGO_ATLAS_PWD +
-    "@sigma.yydxo.mongodb.net/<dbname>?retryWrites=true&w=majority",
+    "@sigma.yydxo.mongodb.net/node-api?retryWrites=true&w=majority",
   {
     // useMongoClient: true,
     useUnifiedTopology: true,
@@ -46,7 +46,8 @@ app.use((req, res, next) => {
 app.use("/products", productRoutes);
 app.use('/orders', orderRoutes);
 
-// Handle errors. If no routes found, then the following line is reached
+// Handle errors. 
+// If the following line is reached, means no routes found
 app.use((req, res, next) => {
   const error = new Error("Not found");
   error.status = 404;
