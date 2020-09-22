@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Upload</title>
+    <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+  </head>
+  <body>
+    <form
+      action="/uploads"
+      method="POST"
+      enctype="multipart/form-data"
+      id="form"
+    >
+      <input type="file" name="productImage" id="" />
+      <input type="text" name="name" id="" />
+      <input type="text" name="price" id="" />
+      <button type="submit">Upload</button>
+    </form>
+
+    <script>
+      const form = document.getElementById("form");
+      form.addEventListener("submit", (e) => {
+        handleSubmit(e);
+      });
+
+      function handleSubmit(e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        fetch("/products", {
+          method: "POST",
+          body: data,
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            console.log("Success:", result);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
